@@ -4,12 +4,15 @@ export default function WalletConnect({ address, isConnected, isConnecting, erro
   if (isConnected && address) {
     const truncated = `${address.slice(0, 4)}…${address.slice(-4)}`;
     return (
-      <div className="wallet-section">
-        <div className="wallet-info">
-          <span className="wallet-dot" />
-          <span className="wallet-address" title={address}>{truncated}</span>
+      <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm border-2 border-green-300 rounded-full shadow-sm">
+          <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse ring-2 ring-green-200" />
+          <span className="font-mono text-sm font-bold text-dreamy-text" title={address}>{truncated}</span>
         </div>
-        <button className="btn btn-secondary btn-sm" onClick={disconnect}>
+        <button 
+          className="px-4 py-2 text-sm font-bold text-dreamy-text bg-white/50 hover:bg-white hover:text-red-500 border-2 border-window-border hover:border-red-300 rounded-full transition-all" 
+          onClick={disconnect}
+        >
           Disconnect
         </button>
       </div>
@@ -17,16 +20,20 @@ export default function WalletConnect({ address, isConnected, isConnecting, erro
   }
 
   return (
-    <div className="wallet-section">
-      {error && <span style={{ fontSize: '0.78rem', color: 'var(--error)', marginRight: 8 }}>{error}</span>}
-      <button className="btn btn-primary" onClick={connect} disabled={isConnecting}>
+    <div className="flex flex-col items-center gap-2 w-full">
+      {error && <span className="text-xs font-bold text-red-500">{error}</span>}
+      <button 
+        className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-dreamy-purple to-dreamy-pink text-white font-bold rounded-full border-2 border-dreamy-purple shadow-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
+        onClick={connect} 
+        disabled={isConnecting}
+      >
         {isConnecting ? (
           <>
-            <span className="spinner spinner-sm" />
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             Connecting…
           </>
         ) : (
-          <>🔗 Connect Wallet</>
+          <>✨ Connect Wallet</>
         )}
       </button>
     </div>

@@ -1,87 +1,176 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWallet } from './hooks/useWallet';
+import { useRetroClick } from './hooks/useRetroClick';
 import { fetchNotes, submitNote } from './lib/stellar';
 import WalletConnect from './components/WalletConnect';
 import AddNoteForm from './components/AddNoteForm';
 import NotesList from './components/NotesList';
+import AnimatedSkyBackground from './components/AnimatedSkyBackground';
+import WindowCard from './components/WindowCard';
+import TimeAndSpace from './components/TimeAndSpace';
+import CursorSparkles from './components/CursorSparkles';
+import HydrationWidget from './components/HydrationWidget';
+import PositiveVibesWidget from './components/PositiveVibesWidget';
+import VibesPlayer from './components/VibesPlayer';
 
 export default function App() {
-  const wallet = useWallet();
+  useRetroClick();
+  const { address, isConnected, isConnecting, error: walletError, connect, disconnect } = useWallet();
   const [notes, setNotes] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingNotes, setIsLoadingNotes] = useState(false);
   const [fetchError, setFetchError] = useState(null);
 
-  const loadNotes = useCallback(async () => {
-    setIsLoading(true);
+  // Manage Z-index for windows
+  const [boxesZIndex, setBoxesZIndex] = useState({
+    wallet: 15,
+    addNote: 20,
+    notes: 10,
+    stickers: 12,
+    vibes: 11,
+    time: 13,
+    hydration: 14,
+    positivity: 16,
+    loading: 17
+  });
+
+  const [topZ, setTopZ] = useState(20);
+
+  const bringToFront = (key) => {
+    setTopZ(prev => prev + 1);
+    setBoxesZIndex(prev => ({ ...prev, [key]: topZ + 1 }));
+  };
+
+  const handleFetchNotes = async () => {
+    setIsLoadingNotes(true);
     setFetchError(null);
     try {
-      const result = await fetchNotes();
-      setNotes(result);
+      const data = await fetchNotes();
+      setNotes(data);
+      setFetchError(null);
     } catch (err) {
-      console.error('Failed to fetch notes:', err);
-      setFetchError(err.message || 'Failed to fetch notes from the blockchain');
+      console.error("Fetch notes error:", err);
+      setFetchError(err.message || 'Failed to fetch notes.');
     } finally {
-      setIsLoading(false);
+      setIsLoadingNotes(false);
     }
+  };
+
+  const handleAddNote = async (content) => {
+    if (!isConnected || !address) throw new Error("Wallet not connected");
+    await submitNote(address, content);
+    await handleFetchNotes();
+  };
+
+  // Fetch notes on mount
+  useEffect(() => {
+    handleFetchNotes();
   }, []);
 
-  // Load notes on mount
-  useEffect(() => {
-    loadNotes();
-  }, [loadNotes]);
-
-  async function handleSubmitNote(content) {
-    if (!wallet.address) throw new Error('Wallet not connected');
-    await submitNote(wallet.address, content);
-    // Refresh notes after submission (with short delay for on-chain confirmation)
-    setTimeout(loadNotes, 3000);
-  }
-
   return (
-    <div className="app-container">
-      <div className="floating-stickers">
-        <span className="sticker sticker-1">✨</span>
-        <span className="sticker sticker-2">💜</span>
-        <span className="sticker sticker-3">⭐</span>
-        <span className="sticker sticker-4">🌸</span>
-        <span className="sticker sticker-5">📝</span>
-        <span className="sticker sticker-6">✨</span>
-      </div>
+    <div className="w-screen h-screen overflow-hidden relative selection:bg-dreamy-pink selection:text-dreamy-text font-sans cursor-default">
+      <AnimatedSkyBackground />
+      <CursorSparkles />
 
-      <header className="app-header">
-        <div className="app-logo">
-          <div className="app-logo-icon">🦄</div>
-          <div>
-            <h1 className="title-with-sparkles">
-              <span className="title-sparkle title-sparkle-left">✨</span>
-              NoteKeeper
-              <span className="title-sparkle title-sparkle-right">⭐</span>
-            </h1>
-            <p className="app-subtitle">Decentralized notes on Stellar</p>
-          </div>
+      {/* Retro Floating Header / Wallet Connect */}
+      <WindowCard 
+        title="NOTEKEEPER.EXE" 
+        defaultPosition={{ x: 400, y: 550 }} 
+        zIndex={boxesZIndex.wallet} 
+        onBringToFront={() => bringToFront('wallet')}
+      >
+        <div className="flex flex-col gap-4 min-w-[300px]">
+          <h1 className="text-sm font-mono tracking-widest text-[#a29bfe] text-center font-bold">WELCOME_DREAMER ✨</h1>
+          <WalletConnect
+            address={address}
+            isConnected={isConnected}
+            isConnecting={isConnecting}
+            error={walletError}
+            connect={connect}
+            disconnect={disconnect}
+          />
         </div>
-        <WalletConnect
-          address={wallet.address}
-          isConnected={wallet.isConnected}
-          isConnecting={wallet.isConnecting}
-          error={wallet.error}
-          connect={wallet.connect}
-          disconnect={wallet.disconnect}
-        />
-      </header>
+      </WindowCard>
 
-      <main className="app-main-content">
-        <AddNoteForm
-          isConnected={wallet.isConnected}
-          onSubmit={handleSubmitNote}
-        />
-        <NotesList
-          notes={notes}
-          isLoading={isLoading}
-          error={fetchError}
-          onRetry={loadNotes}
-        />
-      </main>
+      {/* Main Form Window */}
+      <WindowCard 
+        title="NEW_DREAM.TXT" 
+        defaultPosition={{ x: 50, y: 50 }} 
+        zIndex={boxesZIndex.addNote} 
+        onBringToFront={() => bringToFront('addNote')}
+      >
+        <div className="w-[350px]">
+           <AddNoteForm isConnected={isConnected} onSubmit={handleAddNote} />
+        </div>
+      </WindowCard>
+
+      {/* Notes Gallery Window */}
+      <WindowCard 
+        title="SAVED_DREAMS.DIR" 
+        defaultPosition={{ x: 500, y: 50 }} 
+        zIndex={boxesZIndex.notes} 
+        onBringToFront={() => bringToFront('notes')}
+      >
+        <div className="w-[450px] h-[400px] flex flex-col">
+          <div className="flex justify-between items-center mb-4 sticky top-0 bg-white pb-2 z-10 border-b-2 border-dashed border-[#e8e4f9]">
+             <h2 className="text-xs font-mono font-bold tracking-widest text-[#8E86C6] uppercase">Network Drive: Dreams</h2>
+          </div>
+           <NotesList
+              notes={notes}
+              isLoading={isLoadingNotes}
+              error={fetchError}
+              onRetry={handleFetchNotes}
+            />
+        </div>
+      </WindowCard>
+
+
+
+      {/* Hydration Reminder */}
+      <WindowCard 
+        title="daily.exe" 
+        defaultPosition={{ x: 1050, y: 430 }} 
+        zIndex={boxesZIndex.hydration} 
+        onBringToFront={() => bringToFront('hydration')}
+      >
+        <HydrationWidget />
+      </WindowCard>
+
+      {/* Positivity Message */}
+      <WindowCard 
+        title="affirmations.txt" 
+        defaultPosition={{ x: 750, y: 530 }} 
+        zIndex={boxesZIndex.positivity} 
+        onBringToFront={() => bringToFront('positivity')}
+      >
+        <PositiveVibesWidget />
+      </WindowCard>
+
+      {/* Time & Space Clock/Status */}
+      <WindowCard 
+        title="SYS_CLOCK.EXE" 
+        defaultPosition={{ x: 1050, y: 50 }} 
+        zIndex={boxesZIndex.time} 
+        onBringToFront={() => bringToFront('time')}
+      >
+        <div className="w-[300px]">
+           <TimeAndSpace />
+        </div>
+      </WindowCard>
+
+      {/* Vibes Player */}
+      <WindowCard 
+        title="VIBES_PLAYER.EXE" 
+        defaultPosition={{ x: 40, y: 440 }} 
+        zIndex={boxesZIndex.vibes} 
+        onBringToFront={() => bringToFront('vibes')}
+      >
+        <div className="w-[300px]">
+           <VibesPlayer />
+        </div>
+      </WindowCard>
+
+
+
     </div>
   );
 }
