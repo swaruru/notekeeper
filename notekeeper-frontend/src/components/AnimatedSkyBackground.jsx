@@ -44,6 +44,19 @@ export default function AnimatedSkyBackground() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-gradient-to-br from-[#c4e0f5] via-[#e5d9f2] to-[#ffcce6]">
       
+      {/* Massive Background Brand Typography */}
+      <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none opacity-40 select-none overflow-hidden">
+        <h1 
+          className="text-[#ffffff] font-mono font-black tracking-[0.15em] leading-none pt-2"
+          style={{ 
+            fontSize: 'min(5vw, 85px)',
+            textShadow: '4px 4px 0px #f9a8d4, -2px -2px 0px #a4bbf9, 6px 6px 15px rgba(249, 168, 212, 0.4)'
+          }}
+        >
+          NOTEKEEPER
+        </h1>
+      </div>
+
       {/* 4-Point Retro Stars */}
       {stars.map((star) => (
         <motion.div
@@ -161,6 +174,7 @@ export default function AnimatedSkyBackground() {
          </svg>
       </div>
 
+      {/* Left Bottom Decor */}
       <div className="absolute left-[-20px] bottom-0 w-[300px] opacity-90 drop-shadow-md">
          {/* Custom Floral SVG cluster imitating the pink peonies in the reference image */}
          <svg viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -176,16 +190,6 @@ export default function AnimatedSkyBackground() {
             <circle cx="160" cy="150" r="20" fill="#ffcce6" stroke="white" strokeWidth="4"/>
             <circle cx="70" cy="150" r="35" fill="#ffb8d1" stroke="white" strokeWidth="4"/>
             <path d="M45 140 Q70 115 95 140 Q70 165 45 140" fill="#f9a8d4" stroke="white" strokeWidth="2"/>
-         </svg>
-      </div>
-
-      <div className="absolute left-[30%] top-[-50px] w-[200px] opacity-80 drop-shadow-md rotate-[120deg]">
-         {/* Additional scattered pastel flowers falling from sky */}
-         <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 200 Q120 100 80 50" stroke="#a29bfe" strokeWidth="4" fill="none" strokeLinecap="round"/>
-            <circle cx="80" cy="50" r="20" fill="#fff" stroke="#d9cff6" strokeWidth="4"/>
-            <circle cx="60" cy="60" r="15" fill="#ffb8d1" stroke="white" strokeWidth="3"/>
-            <circle cx="95" cy="70" r="22" fill="#ffeaa7" stroke="white" strokeWidth="3"/>
          </svg>
       </div>
 
