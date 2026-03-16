@@ -1,15 +1,32 @@
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue } from 'framer-motion';
 
 export default function WindowCard({ title, defaultPosition = { x: 0, y: 0 }, zIndex = 10, onBringToFront, children }) {
   const windowRef = useRef(null);
+
+  const getInitialPosition = () => {
+    try {
+      const saved = localStorage.getItem(`widget_${title}`);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error("Failed to load widget position", e);
+    }
+    return defaultPosition;
+  };
+
+  const initPos = getInitialPosition();
+  const x = useMotionValue(initPos.x);
+  const y = useMotionValue(initPos.y);
+
+  const handleDragEnd = () => {
+    localStorage.setItem(`widget_${title}`, JSON.stringify({ x: x.get(), y: y.get() }));
+  };
 
   return (
     <motion.div
       ref={windowRef}
       className="absolute bg-vapor-bg rounded-xl border-4 border-white shadow-[0_0_0_2px_var(--color-vapor-outline),4px_6px_15px_rgba(162,155,254,0.3)] overflow-hidden flex flex-col transition-shadow hover:shadow-[0_0_0_2px_var(--color-vapor-outline),6px_10px_20px_rgba(162,155,254,0.4)]"
-      initial={defaultPosition}
-      style={{ zIndex }}
+      style={{ x, y, zIndex }}
       onPointerDown={onBringToFront}
     >
       {/* Title Bar - Vaporwave OS Style */}
