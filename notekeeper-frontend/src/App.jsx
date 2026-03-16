@@ -40,12 +40,12 @@ export default function App() {
   return (
     <div className="app-container">
       <div className="floating-stickers">
-        <img src="/assets/cat1.png" alt="cat with bow" className="sticker cat-sticker cat-sticker-1" />
-        <img src="/assets/cat2.png" alt="cat with strawberry" className="sticker cat-sticker cat-sticker-2" />
-        <img src="/assets/cat3.png" alt="hugging cats" className="sticker cat-sticker cat-sticker-3" />
+        <span className="sticker sticker-1">✨</span>
+        <span className="sticker sticker-2">💜</span>
+        <span className="sticker sticker-3">⭐</span>
         <span className="sticker sticker-4">🌸</span>
-        <span className="sticker sticker-5">✨</span>
-        <span className="sticker sticker-6">⭐</span>
+        <span className="sticker sticker-5">📝</span>
+        <span className="sticker sticker-6">✨</span>
       </div>
 
       <header className="app-header">

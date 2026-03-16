@@ -45,6 +45,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  cursor: url('/assets/cursor.svg') 12 6, auto !important;
 }
 
 html {
@@ -100,20 +101,12 @@ body {
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
 }
 
-.cat-sticker {
-  width: 120px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(2px 4px 6px rgba(167, 139, 250, 0.4));
-}
-
-.cat-sticker-1 { top: 8%; left: -6%; animation-delay: 0s; transform: rotate(-10deg); width: 140px; }
-.cat-sticker-2 { top: 25%; right: -8%; animation-delay: 1.5s; transform: rotate(12deg); width: 130px; }
-.cat-sticker-3 { bottom: 15%; left: -5%; animation-delay: 2s; transform: rotate(-5deg); width: 160px; }
-
-.sticker-4 { top: 60%; right: 2%; animation-delay: 1.5s; transform: rotate(-10deg); font-size: 2.5rem; }
-.sticker-5 { bottom: 8%; left: 15%; animation-delay: 3s; transform: rotate(20deg); font-size: 2rem;}
-.sticker-6 { bottom: 5%; right: 10%; animation-delay: 0.5s; font-size: 1.8rem; }
+.sticker-1 { top: 5%; left: -5%; animation-delay: 0s; transform: rotate(-15deg); font-size: 2.5rem; }
+.sticker-2 { top: 20%; right: -8%; animation-delay: 1s; transform: rotate(15deg); }
+.sticker-3 { top: 45%; left: -10%; animation-delay: 2s; font-size: 1.8rem; }
+.sticker-4 { top: 60%; right: -5%; animation-delay: 1.5s; transform: rotate(-10deg); font-size: 2.2rem; }
+.sticker-5 { bottom: 10%; left: 10%; animation-delay: 3s; transform: rotate(20deg); }
+.sticker-6 { bottom: 5%; right: 15%; animation-delay: 0.5s; font-size: 1.5rem; }
 
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -210,7 +203,7 @@ body {
   font-family: 'Nunito', sans-serif;
   font-size: 1.1rem;
   font-weight: 800;
-  cursor: pointer;
+  cursor: url('/assets/cursor.svg') 12 6, pointer !important;
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
