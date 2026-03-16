@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Play, Pause, Disc3, Settings2 } from 'lucide-react';
+import { useVaporwaveSynth } from '../hooks/useVaporwaveSynth';
 
 export default function VibesPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  // Hook into the procedural vaporwave synth
+  useVaporwaveSynth(isPlaying);
 
   // Fake progress simulation
   useEffect(() => {
