@@ -45,6 +45,9 @@ Themes & Backgrounds
 5. Lo-fi animated mode
 The contract uses Soroban’s instance storage to persist data across transactions.
 
+DEMO VIDEO LINK
+https://youtu.be/7H21gapJrqI?si=V7S-FIyG5GAV4POW
+
 ---
 
 ## Features
