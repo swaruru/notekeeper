@@ -20,6 +20,32 @@ export default function App() {
   const [isLoadingNotes, setIsLoadingNotes] = useState(false);
   const [fetchError, setFetchError] = useState(null);
 
+  // --- FEATURES STATE ---
+  const [theme, setTheme] = useState('dreamy'); // 'dreamy' | 'peach'
+  const [bgMode, setBgMode] = useState('cloud'); // 'cloud' | 'starry' | 'lofi'
+  
+  // Local Data Overlay for edits, pins, tags, deletes
+  const [noteOverrides, setNoteOverrides] = useState(() => {
+    try {
+      const saved = localStorage.getItem('notekeeper_overrides');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return {};
+  });
+
+  // Apply CSS theme to document
+  useEffect(() => {
+    if (theme === 'peach') document.documentElement.setAttribute('data-theme', 'peach');
+    else document.documentElement.removeAttribute('data-theme');
+  }, [theme]);
+
+  // Persist Local Data Overlay changes
+  useEffect(() => {
+    localStorage.setItem('notekeeper_overrides', JSON.stringify(noteOverrides));
+  }, [noteOverrides]);
+
   // Manage Z-index for windows
   const [boxesZIndex, setBoxesZIndex] = useState({
     wallet: 15,
@@ -67,8 +93,8 @@ export default function App() {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden relative selection:bg-dreamy-pink selection:text-dreamy-text font-sans cursor-default">
-      <AnimatedSkyBackground />
+    <div className="w-screen h-screen overflow-hidden relative selection:bg-[var(--theme-pink)] selection:text-[var(--theme-text)] font-sans cursor-default transition-colors duration-500 bg-[var(--theme-bg)]">
+      <AnimatedSkyBackground mode={bgMode} />
       <CursorSparkles />
 
       {/* Retro Floating Header / Wallet Connect */}
@@ -112,13 +138,15 @@ export default function App() {
       >
         <div className="w-[450px] h-[400px] flex flex-col">
           <div className="flex justify-between items-center mb-4 sticky top-0 bg-white pb-2 z-10 border-b-2 border-dashed border-[#e8e4f9]">
-             <h2 className="text-xs font-mono font-bold tracking-widest text-[#8E86C6] uppercase">Network Drive: Dreams</h2>
+             <h2 className="text-xs font-mono font-bold tracking-widest text-[var(--theme-text)] uppercase">Network Drive: Dreams</h2>
           </div>
            <NotesList
               notes={notes}
               isLoading={isLoadingNotes}
               error={fetchError}
               onRetry={handleFetchNotes}
+              noteOverrides={noteOverrides}
+              setNoteOverrides={setNoteOverrides}
             />
         </div>
       </WindowCard>
@@ -165,7 +193,12 @@ export default function App() {
         onBringToFront={() => bringToFront('vibes')}
       >
         <div className="w-[300px]">
-           <VibesPlayer />
+           <VibesPlayer 
+             theme={theme} 
+             setTheme={setTheme} 
+             bgMode={bgMode} 
+             setBgMode={setBgMode} 
+           />
         </div>
       </WindowCard>
 

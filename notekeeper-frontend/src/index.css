@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  /* Vaporwave Core Solid Palette */
-  --color-vapor-bg: #fcf8ff;       /* Very light pink/white for window bodies */
-  --color-vapor-header: #a29bfe;   /* Deep lavender for title bars */
-  --color-vapor-outline: #c1b6f9;  /* Purple outer stroke for windows */
-  --color-vapor-pink: #ffb8d1;     /* Solid pink for buttons */
-  --color-vapor-text: #6c5ce7;     /* Deep purple text */
+  /* Dynamic Palette variables */
+  --color-vapor-bg: var(--theme-bg);       
+  --color-vapor-header: var(--theme-header);   
+  --color-vapor-outline: var(--theme-outline);  
+  --color-vapor-pink: var(--theme-pink);     
+  --color-vapor-text: var(--theme-text);     
 
   /* Legacy Dreamy vars (temporarily kept to prevent breaking unrestyled components) */
   --color-dreamy-sky: #e0f2fe;     
@@ -28,6 +28,33 @@
 
 *, *::before, *::after {
   cursor: url('/assets/cursor.svg') 12 6, auto !important;
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, fill 0.4s ease, stroke 0.4s ease;
+}
+
+:root {
+  /* Default: Dreamy Night Mode (purple/lavender tones) */
+  --theme-bg: #fcf8ff;
+  --theme-header: #a29bfe;
+  --theme-outline: #c1b6f9;
+  --theme-pink: #ffb8d1;
+  --theme-text: #6c5ce7;
+  
+  --sky-col-1: #c4e0f5;
+  --sky-col-2: #e5d9f2;
+  --sky-col-3: #ffcce6;
+}
+
+:root[data-theme="peach"] {
+  /* Soft Day Mode (peach tones) */
+  --theme-bg: #fff9f6;
+  --theme-header: #ffb4a2;
+  --theme-outline: #ffcdb2;
+  --theme-pink: #ffc2d1;
+  --theme-text: #d58c8c;
+
+  --sky-col-1: #ffe5d9;
+  --sky-col-2: #ffcad4;
+  --sky-col-3: #f4acb7;
 }
 
 body {

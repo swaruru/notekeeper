@@ -27,7 +27,22 @@ Users can:
 1. Add new notes
 2. Store notes securely on-chain
 3. Retrieve all stored notes from the contract
+4. Edit notes
+5. Delete notes
 
+Productivity:
+
+1. Pin important notes
+2. Real-time search
+3. Tag system (#ideas, #diary)
+
+Themes & Backgrounds
+
+1. Dreamy Night Mode
+2. Soft Day Mode
+3. Cloud mode
+4. Starry night mode
+5. Lo-fi animated mode
 The contract uses Soroban’s instance storage to persist data across transactions.
 
 ---
@@ -182,12 +197,11 @@ Replace this with your deployed contract explorer link.
 
 Possible enhancements for the project:
 
-* Add **note IDs**
-* Implement **update note**
-* Implement **delete note**
-* Add **timestamps**
-* Support **user-specific note retrieval**
-* Build a **frontend interface (React + Freighter wallet)**
+* Encrypted notes
+* Collaborative notes
+* Mobile optimization
+* NFT-based notes
+
 
 ---
 

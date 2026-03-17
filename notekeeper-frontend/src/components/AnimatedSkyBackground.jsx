@@ -25,7 +25,7 @@ const HEART_VARIANTS = {
   }
 };
 
-export default function AnimatedSkyBackground() {
+export default function AnimatedSkyBackground({ mode = 'cloud' }) {
   const stars = Array.from({ length: 20 }).map((_, i) => ({
     id: i,
     top: `${Math.random() * 90}%`,
@@ -41,23 +41,34 @@ export default function AnimatedSkyBackground() {
     size: Math.random() * 15 + 15
   }));
 
+  const musicNotes = Array.from({ length: 12 }).map((_, i) => ({
+    id: `m${i}`,
+    left: `${Math.random() * 100}%`,
+    delay: Math.random() * 8,
+    size: Math.random() * 20 + 15
+  }));
+
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-gradient-to-br from-[#c4e0f5] via-[#e5d9f2] to-[#ffcce6]">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 bg-gradient-to-br from-[var(--sky-col-1)] via-[var(--sky-col-2)] to-[var(--sky-col-3)] transition-colors duration-1000">
+      
+      {/* Dark Overlay for Starry Mode */}
+      <div className={`absolute inset-0 bg-[#16002f] mix-blend-multiply transition-opacity duration-1000 ${mode === 'starry' ? 'opacity-80' : 'opacity-0'}`} />
       
       {/* Massive Background Brand Typography */}
-      <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none opacity-40 select-none overflow-hidden">
+      <div className="absolute top-0 left-0 w-full flex justify-center pointer-events-none select-none overflow-hidden">
         <h1 
-          className="text-[#ffffff] font-mono font-black tracking-[0.15em] leading-none pt-2"
+          className="text-white font-mono tracking-[0.15em] leading-none pt-2"
           style={{ 
             fontSize: 'min(5vw, 85px)',
-            textShadow: '4px 4px 0px #f9a8d4, -2px -2px 0px #a4bbf9, 6px 6px 15px rgba(249, 168, 212, 0.4)'
+            textShadow: '4px 4px 0px #f9a8d4, 8px 8px 15px rgba(249, 168, 212, 0.4)'
           }}
         >
           NOTEKEEPER
         </h1>
       </div>
 
-      {/* 4-Point Retro Stars */}
+      {/* 4-Point Retro Stars (More visible in starry mode) */}
+      <div className={`transition-opacity duration-1000 ${mode === 'starry' ? 'opacity-100' : 'opacity-60'}`}>
       {stars.map((star) => (
         <motion.div
           key={star.id}
@@ -73,6 +84,8 @@ export default function AnimatedSkyBackground() {
           </svg>
         </motion.div>
       ))}
+
+      </div>
 
       {/* Primary Solid Crescent Moon */}
       <motion.div 
@@ -102,8 +115,9 @@ export default function AnimatedSkyBackground() {
         </motion.div>
       ))}
 
-      {/* Hard-Outline Solid Clouds */}
-      <motion.div
+      {/* Hard-Outline Solid Clouds (Hidden in Starry Mode) */}
+      <div className={`transition-opacity duration-1000 ${mode === 'starry' ? 'opacity-0' : 'opacity-100'}`}>
+        <motion.div
         className="absolute top-[35%] left-[-5%]"
         variants={CLOUD_VARIANTS}
         animate="animate1"
@@ -142,6 +156,25 @@ export default function AnimatedSkyBackground() {
            <path d="M25 45C11.1929 45 0 33.8071 0 20C0 6.19288 11.1929 -5 25 -5C34.4093 -5 42.6039 0.230752 46.887 7.72477C49.9702 5.00843 54.062 3.33333 58.5 3.33333C68.6259 3.33333 76.8333 11.5408 76.8333 21.6667C76.8333 22.1385 76.8155 22.6062 76.7806 23.0691C78.4716 22.0911 80.4357 21.5333 82.5 21.5333C89.4036 21.5333 95 27.1298 95 34.0333C95 40.9369 89.4036 46.5333 82.5 46.5333C78.3308 46.5333 74.637 44.4921 72.378 41.3482C68.8028 43.619 64.5559 45 60 45H25Z" fill="#a4bbf9" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
         </svg>
       </motion.div>
+
+      </div>
+
+      {/* Floating Lo-fi Music Notes */}
+      <div className={`absolute inset-0 transition-opacity duration-1000 ${mode === 'lofi' ? 'opacity-100' : 'opacity-0'}`}>
+        {musicNotes.map((note) => (
+          <motion.div
+            key={note.id}
+            className="absolute bottom-[-10%]"
+            style={{ left: note.left }}
+            variants={HEART_VARIANTS}
+            animate="float"
+            custom={note.delay}
+            transition={{ ...HEART_VARIANTS.float.transition, delay: note.delay }}
+          >
+            <span style={{ fontSize: note.size, color: 'var(--theme-text)', opacity: 0.6, fontWeight: 'bold' }}>♪</span>
+          </motion.div>
+        ))}
+      </div>
 
       {/* Decorative Floral Assets (Static borders) */}
       <div className="absolute right-0 top-[20%] w-[350px] opacity-90 drop-shadow-md">

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Play, Pause, Disc3, Settings2 } from 'lucide-react';
+import { Play, Pause, Disc3, Settings2, Moon, Sun, Cloud, Stars, Music } from 'lucide-react';
 import { useVaporwaveSynth } from '../hooks/useVaporwaveSynth';
 
-export default function VibesPlayer() {
+export default function VibesPlayer({ theme, setTheme, bgMode, setBgMode }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -68,20 +68,49 @@ export default function VibesPlayer() {
         </div>
       </div>
 
-      {/* Controls */}
+      {/* Play Controls */}
       <div className="flex items-center justify-center gap-6 mt-1">
-        <button className="text-[#a29bfe] hover:text-[#ffb8d1] transition-colors cursor-pointer active:scale-95">
-          <Settings2 size={20} />
+        <button 
+           className="text-[var(--theme-header)] hover:text-[var(--theme-pink)] transition-colors cursor-pointer active:scale-95"
+           onClick={() => setTheme(theme === 'dreamy' ? 'peach' : 'dreamy')}
+           title="Toggle Theme"
+        >
+          {theme === 'dreamy' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
         <button 
-          className="w-14 h-14 bg-[#ffb8d1] border-2 border-white rounded-xl flex items-center justify-center text-white shadow-[0_3px_0_0_#f9a8d4] active:translate-y-[3px] active:shadow-none transition-all cursor-pointer"
+          className="w-14 h-14 bg-[var(--theme-pink)] border-2 border-white rounded-xl flex items-center justify-center text-white shadow-[0_3px_0_0_var(--theme-text)] opacity-90 hover:opacity-100 active:translate-y-[3px] active:shadow-none transition-all cursor-pointer"
           onClick={() => setIsPlaying(!isPlaying)}
         >
           {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" className="ml-1" />}
         </button>
-        <button className="text-[#a29bfe] hover:text-[#ffb8d1] transition-colors cursor-pointer active:scale-95">
-          <Disc3 size={20} />
+        <button className="text-[var(--theme-header)] hover:text-[var(--theme-pink)] transition-colors cursor-pointer active:scale-95" title="Settings">
+          <Settings2 size={20} />
         </button>
+      </div>
+
+      {/* Background Mode Selectors */}
+      <div className="flex justify-center gap-2 mt-1 pt-2 border-t-2 border-dashed border-[#d9cff6] w-full">
+         <button 
+           onClick={() => setBgMode('cloud')}
+           className={`p-1.5 rounded-md border-2 transition-all cursor-pointer ${bgMode === 'cloud' ? 'bg-[var(--theme-pink)] border-white text-white shadow-sm' : 'bg-transparent border-transparent text-[var(--theme-header)] hover:bg-white'}`}
+           title="Cloud Mode"
+         >
+           <Cloud size={14} />
+         </button>
+         <button 
+           onClick={() => setBgMode('starry')}
+           className={`p-1.5 rounded-md border-2 transition-all cursor-pointer ${bgMode === 'starry' ? 'bg-[var(--theme-pink)] border-white text-white shadow-sm' : 'bg-transparent border-transparent text-[var(--theme-header)] hover:bg-white'}`}
+           title="Starry Night"
+         >
+           <Stars size={14} />
+         </button>
+         <button 
+           onClick={() => setBgMode('lofi')}
+           className={`p-1.5 rounded-md border-2 transition-all cursor-pointer ${bgMode === 'lofi' ? 'bg-[var(--theme-pink)] border-white text-white shadow-sm' : 'bg-transparent border-transparent text-[var(--theme-header)] hover:bg-white'}`}
+           title="Lo-fi Mode"
+         >
+           <Music size={14} />
+         </button>
       </div>
     </div>
   );
